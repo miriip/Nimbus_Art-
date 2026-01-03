@@ -24,11 +24,22 @@ const Header = () => {
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-      setIsOpen(false)
-    }
+    setIsOpen(false)
+    
+    // Pequeño delay para que el menú se cierre antes de hacer scroll
+    setTimeout(() => {
+      const element = document.querySelector(href)
+      if (element) {
+        const headerHeight = 80 // Altura aproximada del header
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+        const offsetPosition = elementPosition - headerHeight
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+      }
+    }, 100)
   }
 
   return (
@@ -64,7 +75,7 @@ const Header = () => {
                 <a
                   href={link.href}
                   onClick={(e) => handleLinkClick(e, link.href)}
-                  className="text-gray-300 hover:text-neon-cyan transition-colors relative group"
+                  className="text-gray-300 hover:text-neon-cyan transition-colors relative group cursor-pointer"
                 >
                   {link.name}
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-neon group-hover:w-full transition-all duration-300"></span>
@@ -99,7 +110,8 @@ const Header = () => {
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleLinkClick(e, link.href)}
-                  className="text-lg font-medium text-gray-300 hover:text-neon-cyan transition-colors pl-4 border-l-2 border-transparent hover:border-neon-cyan"
+                  className="text-lg font-medium text-gray-300 hover:text-neon-cyan transition-colors pl-4 border-l-2 border-transparent hover:border-neon-cyan cursor-pointer touch-manipulation"
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   {link.name}
                 </a>
